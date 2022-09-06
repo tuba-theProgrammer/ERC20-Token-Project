@@ -73,7 +73,18 @@ contract ERC20 is ERC20Interface{
 
  
 
-
+ function tranferFrom(address from,address to,uint tokens) public override returns (bool success){
+    // checking the allowance of curent user - who call this function
+    // is greater and equal to tokens
+    
+    require(allowed[from][msg.sender]>=tokens);
+    require(balances[from]>= tokens);
+    balances[from] -= tokens;
+    allowed[from][msg.sender] -=tokens;
+    balances[to] += tokens;
+    emit Transfer(from, to, tokens);
+    return true;
+  }
    function allowance(address tokenOwner,address spender) public view override returns(uint remaining){
     return allowed[tokenOwner][spender];
    }
