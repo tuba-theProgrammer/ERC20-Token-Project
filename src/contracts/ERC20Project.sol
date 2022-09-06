@@ -65,9 +65,13 @@ contract ERC20 is ERC20Interface{
 
 
 
-  function tranferFrom(address from,address to,uint tokens) public override returns (bool success){
-    
-  }
+ // it allows the spender to withdraw and transfer from the
+ // owners account multiple times upto the allowance
+ // this function will also change the current allowance
+ // func - will only be called by the account that was allowed to
+ // transfer token from the holders accounts to his own or to another
+
+ 
 
 
    function allowance(address tokenOwner,address spender) public view override returns(uint remaining){
@@ -76,10 +80,15 @@ contract ERC20 is ERC20Interface{
 
 
 // this functiokn will be called by token owner to set the allowance
-// whick is the ammount that can be spent by the spender of this account
+// which is the ammount that can be spent by the spender of this account
 
   function approve(address spender,uint tokens) public override returns (bool success){
+     require(balances[msg.sender] >= tokens);
+     require(tokens>0); 
+     allowed[msg.sender][spender] = tokens;
   
+     emit Approval(msg.sender, spender, tokens);
+     return true;
   }
      
 
