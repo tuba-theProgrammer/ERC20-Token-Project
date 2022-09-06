@@ -11,7 +11,7 @@ interface ERC20Interface{
     // function tranferFrom(address from,address to,uint tokens) external returns (bool success);
 
 
-    event Tranfer(address indexed from, address indexed to, uint token);
+    event Transfer(address indexed from, address indexed to, uint token);
     //event Approval(address indexed tokenOwner,address indexed spender,uint tokens);
 
 
@@ -30,4 +30,24 @@ contract ERC20 is ERC20Interface{
     uint public founder;
     // map to store each address and no of tokens with respect to it
     mapping(address=>uint) public balances;
+
+
+      function balanceOf(address tokenOwner) public view override returns (uint balance){
+        return balances[tokenOwner];
+      }
+  
+ function transfer(address to,uint tokens) public override returns(bool success){
+      
+       require(balances[msg.sender]>=tokens,"not enough balance available to tranfer");
+       
+       balances[to] +=tokens;
+       balances[msg.sender] -= tokens;
+
+       emit Transfer(msg.sender, to, tokens);
+       return true;
+ }
+
+    
+
+
 }
